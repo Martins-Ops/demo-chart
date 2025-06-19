@@ -1,0 +1,47 @@
+image:
+  repository: registry.digitalocean.com/talentgraph-auth/ucard_ng_user_svc
+
+env:
+  FLASK_APP: "run"
+  AUTH_SVC_URL: "http://ucard-ng-auth-svc:5001"
+  FLASGGER_BASE_PATH: "/user"
+  TEMPORAL_URL: "24.144.64.139:7233"
+  TEMPORAL_TASK_QUEUE_NAME: user_svc_queue_prod
+  NOTIFICATION_PUBSUB_NAME: pubsub
+  BACK_OFFICE_URL: https://ucard-admin.upi.dev
+  AGENT_URL: https://ucard-agent.upi.dev
+  SUPERDEALER_URL: https://ucard-superdealer.upi.dev
+  WALLET_SVC_URL: http://ucard-ng-wallet-svc:5011
+  PROVIDER_PROXY_URL: http://providerproxy-apisix-gateway.providerproxy.svc.cluster.local
+  PRODUCT_SVC_URL: http://ucard-ng-product-svc:5008
+  TENANT_SVC_URL: "http://ucard-tenant-mgmnt-service"
+  FLASK_ENV: production
+
+
+
+resources:
+  requests:
+    memory: "128Mi"
+    cpu: "100m"
+  limits:
+    memory: "512Mi"
+
+dapr:
+  appId: ucard_user_svc
+  appPort: 4000
+  enableMetrics: true
+  enabled: true
+  metricsPort: 9099
+  sidecarListenAddresses: 0.0.0.0
+
+keda:
+  enabled: true
+  cpuTarget: "50"           # 50% of requested CPU
+  pollingInterval: 15                 
+  minReplicaCount: 1                  
+  maxReplicaCount: 10       # must not exceed your topic’s partition count
+  kafka:
+    topic: autoscale-topic                 
+    bootstrapServers: kafka-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092                                    
+    consumerGroup: autoscaling-subscriber
+    lagThreshold: "5"  
