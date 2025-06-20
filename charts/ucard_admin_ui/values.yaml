@@ -1,0 +1,15 @@
+replicaCount: 1
+
+image:
+  repository: registry.digitalocean.com/talentgraph-auth/ucard_admin_ui
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "0.0.6"
+
+keda:
+  enabled: true
+  minReplicaCount: 1
+  maxReplicaCount: 10
+  cooldownPeriod: 300       
+  pollingInterval: 30       # seconds between metric polls
+  cpuTarget: "50"          
