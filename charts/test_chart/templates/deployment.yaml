@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name }}-deployment
+  annotations:
+    reloader.stakater.com/auto: "true"
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -11,8 +13,6 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}
-    annotations:
-      reloader.stakater.com/auto: "true"
     spec:
       containers:
         - name: nginx
