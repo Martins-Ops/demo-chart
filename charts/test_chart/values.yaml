@@ -1,0 +1,17 @@
+replicaCount: 1
+
+image:
+  repository: nginx
+  tag: stable
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+
+secret:
+  name: my-app-secret
+  usernameKey: username
+  passwordKey: password
+
+
