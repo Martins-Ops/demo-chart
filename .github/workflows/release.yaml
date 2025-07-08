@@ -1,12 +1,16 @@
 name: BUILD_WORKFLOW_DEMO
-
-
 on:
   push:
-
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Build completed successfully very so so so very wells"
+      - name: Notify Flux of image update
+        if: always()
+        env:
+          FLUX_WEBHOOK_URL: ${{ secrets.FLUX_WEBHOOK_URL }}
+        run: |
+          curl -X POST \
+               -H "Content-Type: application/json" \
+               --data '{}' \
+               "$FLUX_WEBHOOK_URL"
