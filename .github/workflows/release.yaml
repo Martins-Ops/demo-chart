@@ -5,7 +5,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Notify Flux of image update now
+      - name: Notify Flux of image updater now
         if: always()
         env:
           FLUX_WEBHOOK_URL: ${{ secrets.FLUX_WEBHOOK_URL }}
